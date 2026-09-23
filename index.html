@@ -1,0 +1,1351 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>NER Landslide Early Warning System | Predict. Prepare. Protect.</title>
+  <meta name="description" content="AI-powered real-time landslide monitoring, prediction, and early warning platform for North East India. Integrated IMD rainfall, satellite InSAR, soil sensors, and community alerts.">
+  <meta name="keywords" content="NER Landslide, Early Warning System, North East India, Disaster Management, NDMA, Assam, Arunachal Pradesh, Meghalaya, Slope Stability, IMD">
+  
+  <!-- Modern Typography from Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,400;1,600&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+  
+  <!-- Main Stylesheet -->
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body data-theme="light">
+
+  <!-- 1. Top Utility Bar -->
+  <div class="top-utility-bar" role="region" aria-label="National Civic Header and Helpline">
+    <div class="container utility-container">
+      <div class="utility-left">
+        <span class="gov-flag-badge">
+          <span class="flag-stripe orange"></span>
+          <span class="flag-stripe white"></span>
+          <span class="flag-stripe green"></span>
+        </span>
+        <span class="gov-title" data-i18n="gov_initiative">Government of India | Disaster Management Initiative — North Eastern Region</span>
+      </div>
+      
+      <div class="utility-right">
+        <!-- Language Switcher -->
+        <div class="lang-selector-group">
+          <label for="langSelect" class="sr-only">Select Language</label>
+          <svg class="util-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><line x1="2" y1="12" x2="22" y2="12"></line><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path></svg>
+          <select id="langSelect" class="lang-select" aria-label="Language Selector">
+            <option value="en" selected>English</option>
+            <option value="hi">हिन्दी (Hindi)</option>
+            <option value="as">অসমীয়া (Assamese)</option>
+          </select>
+        </div>
+
+        <!-- Accessibility Controls -->
+        <div class="a11y-controls" aria-label="Accessibility Settings">
+          <button id="btnFontDec" class="a11y-btn" title="Decrease font size" aria-label="Decrease font size">A-</button>
+          <button id="btnFontReset" class="a11y-btn" title="Reset font size" aria-label="Reset font size">A</button>
+          <button id="btnFontInc" class="a11y-btn" title="Increase font size" aria-label="Increase font size">A+</button>
+          <button id="btnContrastToggle" class="a11y-btn contrast-toggle" title="Toggle high contrast mode" aria-label="High contrast toggle">
+            <svg viewBox="0 0 24 24" width="14" height="14" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm0-14v12a6 6 0 0 0 0-12z"/></svg>
+          </button>
+        </div>
+
+        <!-- Emergency Helpline 1077 -->
+        <a href="tel:1077" class="helpline-link" title="Emergency Disaster Helpline">
+          <span class="helpline-pulse"></span>
+          <span class="helpline-label" data-i18n="helpline_label">24/7 Helpline:</span>
+          <strong>1077</strong>
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <!-- 2. Minimal Sticky Navigation -->
+  <header class="main-header" id="navbar">
+    <div class="container nav-container">
+      <a href="#hero" class="brand-wrapper" aria-label="NER Landslide Early Warning System Home">
+        <div class="brand-logo-frame">
+          <img src="assets/logo.svg" alt="NER Crest" class="brand-logo" width="46" height="46">
+        </div>
+        <div class="brand-text">
+          <span class="brand-title">NER Landslide Warning</span>
+          <span class="brand-tagline" data-i18n="tagline">Predict. Prepare. Protect.</span>
+        </div>
+      </a>
+
+      <!-- Desktop Nav Links -->
+      <nav class="desktop-nav" aria-label="Main Navigation">
+        <ul class="nav-menu">
+          <li><a href="#hero" class="nav-link active" data-i18n="nav_home">Home</a></li>
+          <li><a href="#risk-map" class="nav-link" data-i18n="nav_map">Risk Map</a></li>
+          <li><a href="#live-risk" class="nav-link" data-i18n="nav_alerts">Live Alerts</a></li>
+          <li><a href="#field-reporting" class="nav-link" data-i18n="nav_field">Field Reports</a></li>
+          <li><a href="#emergency-response" class="nav-link" data-i18n="nav_response">Response Network</a></li>
+          <li><a href="#about" class="nav-link" data-i18n="nav_about">About</a></li>
+        </ul>
+      </nav>
+
+      <div class="nav-actions">
+        <a href="#risk-map" class="btn btn-navy pill-btn" id="btnLiveDashboard" data-i18n="btn_dashboard">
+          <span class="live-dot"></span>
+          View Live Dashboard
+        </a>
+        <button class="mobile-toggle" id="mobileMenuBtn" aria-label="Toggle Mobile Navigation Menu" aria-expanded="false">
+          <span class="bar"></span>
+          <span class="bar"></span>
+          <span class="bar"></span>
+        </button>
+      </div>
+    </div>
+
+    <!-- Mobile Drawer Menu -->
+    <div class="mobile-drawer" id="mobileDrawer">
+      <ul class="mobile-menu">
+        <li><a href="#hero" class="mobile-nav-link" data-i18n="nav_home">Home</a></li>
+        <li><a href="#risk-map" class="mobile-nav-link" data-i18n="nav_map">Risk Map</a></li>
+        <li><a href="#live-risk" class="mobile-nav-link" data-i18n="nav_alerts">Live Alerts</a></li>
+        <li><a href="#field-reporting" class="mobile-nav-link" data-i18n="nav_field">Field Reports</a></li>
+        <li><a href="#emergency-response" class="mobile-nav-link" data-i18n="nav_response">Response Network</a></li>
+        <li><a href="#about" class="mobile-nav-link" data-i18n="nav_about">About</a></li>
+      </ul>
+      <div class="mobile-drawer-cta">
+        <button class="btn btn-navy btn-block" onclick="openIncidentModal()" data-i18n="btn_report_incident">Report an Incident</button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Live Emergency Banner Ticker -->
+  <div class="emergency-ticker" role="alert" aria-live="polite">
+    <div class="container ticker-inner">
+      <div class="ticker-badge">
+        <span class="pulse-red"></span>
+        <span data-i18n="ticker_badge">URGENT ADVISORY</span>
+      </div>
+      <div class="ticker-content" id="tickerText" data-i18n="ticker_msg">
+        NH-13 (Bhalukpong–Tawang Corridor): Red Alert active due to continuous 186mm rainfall. Slope movement detected at km 42. Traffic diverted.
+      </div>
+      <a href="#live-risk" class="ticker-link" data-i18n="ticker_view">View Bulletin →</a>
+    </div>
+  </div>
+
+  <main>
+    <!-- 3. Hero Section -->
+    <section class="hero-section" id="hero">
+      <div class="hero-bg-overlay">
+        <!-- Procedural Atmospheric Topographic Contours -->
+        <svg class="hero-topo-bg" viewBox="0 0 1440 600" preserveAspectRatio="none" fill="none" opacity="0.12">
+          <path d="M-100,200 C300,100 600,350 900,180 C1200,20 1400,280 1600,150" stroke="#ffffff" stroke-width="2" />
+          <path d="M-100,260 C320,160 580,410 920,240 C1180,80 1380,340 1600,210" stroke="#ffffff" stroke-width="1.5" stroke-dasharray="6,6" />
+          <path d="M-100,340 C280,240 640,480 880,320 C1220,160 1420,420 1600,290" stroke="#ffffff" stroke-width="2" />
+          <path d="M-100,420 C340,320 620,560 940,390 C1160,230 1360,490 1600,370" stroke="#ffffff" stroke-width="1" />
+        </svg>
+      </div>
+
+      <div class="container hero-container">
+        <!-- Left Hero Content -->
+        <div class="hero-content reveal-fade">
+          <div class="hero-eyebrow">
+            <span class="ai-chip">
+              <svg class="chip-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2v4m0 12v4M4.93 4.93l2.83 2.83m8.48 8.48l2.83 2.83M2 12h4m12 0h4M4.93 19.07l2.83-2.83m8.48-8.48l2.83-2.83"/></svg>
+              <span data-i18n="hero_eyebrow">AI-POWERED DISASTER INTELLIGENCE</span>
+            </span>
+          </div>
+
+          <h1 class="hero-headline" data-i18n="hero_headline">
+            See the risk before the slope gives way.
+          </h1>
+
+          <p class="hero-copy" data-i18n="hero_copy">
+            Real-time rainfall, terrain, sensor, satellite, and community intelligence for safer roads and resilient villages across North East India.
+          </p>
+
+          <div class="hero-buttons">
+            <a href="#risk-map" class="btn btn-hero-primary" id="btnExploreMap">
+              <span data-i18n="hero_btn_map">Explore Live Risk Map</span>
+              <svg class="btn-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+            </a>
+            <button class="btn btn-hero-secondary" onclick="openIncidentModal()">
+              <svg class="btn-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/></svg>
+              <span data-i18n="hero_btn_report">Report an Incident</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- Right Atmospheric Scene & Live Glass Card -->
+        <div class="hero-visual reveal-fade" style="animation-delay: 0.15s;">
+          <div class="hero-visual-card">
+            <div class="visual-art-frame">
+              <!-- Rich Procedural Mountain Scene with Monsoon Fog & Road Art -->
+              <svg class="visual-svg-canvas" viewBox="0 0 600 450" xmlns="http://www.w3.org/2000/svg">
+                <defs>
+                  <linearGradient id="skyGrad" x1="0" y1="0" x2="0" y2="1">
+                    <stop offset="0%" stop-color="#0e2338"/>
+                    <stop offset="60%" stop-color="#1b3d5b"/>
+                    <stop offset="100%" stop-color="#2a5270"/>
+                  </linearGradient>
+                  <linearGradient id="fogGrad" x1="0" y1="0" x2="1" y2="0">
+                    <stop offset="0%" stop-color="#e0f2fe" stop-opacity="0.1"/>
+                    <stop offset="50%" stop-color="#bae6fd" stop-opacity="0.25"/>
+                    <stop offset="100%" stop-color="#e0f2fe" stop-opacity="0.05"/>
+                  </linearGradient>
+                  <linearGradient id="mountainRidge1" x1="0" y1="0" x2="0" y2="1">
+                    <stop offset="0%" stop-color="#143428"/>
+                    <stop offset="100%" stop-color="#0a1d17"/>
+                  </linearGradient>
+                  <linearGradient id="mountainRidge2" x1="0" y1="0" x2="0" y2="1">
+                    <stop offset="0%" stop-color="#1d4838"/>
+                    <stop offset="100%" stop-color="#102b21"/>
+                  </linearGradient>
+                  <linearGradient id="contourGrad" x1="0" y1="0" x2="1" y2="1">
+                    <stop offset="0%" stop-color="#38bdf8" stop-opacity="0.4"/>
+                    <stop offset="100%" stop-color="#38bdf8" stop-opacity="0.05"/>
+                  </linearGradient>
+                </defs>
+
+                <!-- Background Sky -->
+                <rect width="600" height="450" fill="url(#skyGrad)"/>
+
+                <!-- Distant Himalayan Ridges (Arunachal / Meghalaya) -->
+                <path d="M0,210 Q140,130 280,180 T600,140 L600,450 L0,450 Z" fill="#0d2638" opacity="0.7"/>
+                <path d="M0,250 Q160,190 340,240 T600,200 L600,450 L0,450 Z" fill="url(#mountainRidge1)" opacity="0.9"/>
+
+                <!-- Monsoon Mist Layers -->
+                <path d="M-50,230 Q200,190 450,240 T650,220 L650,280 L-50,280 Z" fill="url(#fogGrad)"/>
+
+                <!-- Foreground Mountain Slope with Landslide Risk Shear Plane -->
+                <path d="M0,290 Q220,240 400,320 L600,300 L600,450 L0,450 Z" fill="url(#mountainRidge2)"/>
+
+                <!-- GIS Contour Overlays -->
+                <path d="M20,330 C150,300 280,360 420,340 C500,330 560,320 600,325" fill="none" stroke="#38bdf8" stroke-width="1.5" stroke-dasharray="4,4" opacity="0.75"/>
+                <path d="M10,360 C160,330 300,390 450,370 C520,360 570,350 600,355" fill="none" stroke="#38bdf8" stroke-width="1" opacity="0.5"/>
+                <path d="M0,400 C180,370 320,430 480,410 C540,400 580,390 600,395" fill="none" stroke="#38bdf8" stroke-width="1" opacity="0.4"/>
+
+                <!-- Winding Mountain Highway (NH-13 Representation) -->
+                <path d="M30,450 C180,420 220,380 340,360 C440,340 500,370 590,340" fill="none" stroke="#334155" stroke-width="10" stroke-linecap="round"/>
+                <path d="M30,450 C180,420 220,380 340,360 C440,340 500,370 590,340" fill="none" stroke="#e2e8f0" stroke-width="1.8" stroke-dasharray="8,6" stroke-linecap="round"/>
+
+                <!-- Active Geotechnical Sensor Node Pulse -->
+                <g transform="translate(340, 360)">
+                  <circle cx="0" cy="0" r="18" fill="#ef4444" opacity="0.2" class="pulse-ring"/>
+                  <circle cx="0" cy="0" r="10" fill="#ef4444" opacity="0.4" class="pulse-ring-inner"/>
+                  <circle cx="0" cy="0" r="5" fill="#ef4444"/>
+                  <circle cx="0" cy="0" r="2" fill="#ffffff"/>
+                </g>
+
+                <!-- Sensor Telemetry Line -->
+                <line x1="340" y1="360" x2="410" y2="280" stroke="#38bdf8" stroke-width="1.5" stroke-dasharray="2,2"/>
+                <circle cx="410" cy="280" r="3" fill="#38bdf8"/>
+                
+                <!-- Telemetry Tooltip on Image -->
+                <g transform="translate(415, 255)">
+                  <rect width="165" height="42" rx="6" fill="#0c1b2a" fill-opacity="0.9" stroke="#38bdf8" stroke-width="1"/>
+                  <text x="10" y="16" fill="#e2e8f0" font-family="'Plus Jakarta Sans', sans-serif" font-size="10" font-weight="600">IN-SITU SENSOR #AR-13</text>
+                  <text x="10" y="32" fill="#ef4444" font-family="'Plus Jakarta Sans', sans-serif" font-size="11" font-weight="700">Displacement: 14.8 mm</text>
+                </g>
+              </svg>
+            </div>
+
+            <!-- Restrained Live Status Glass Card -->
+            <div class="live-glass-badge">
+              <div class="glass-item">
+                <div class="glass-value">
+                  <span class="state-count">8</span>
+                  <span class="glass-sub" data-i18n="hero_status_states">States</span>
+                </div>
+                <div class="glass-caption" data-i18n="hero_status_monitoring">Monitored 24/7</div>
+              </div>
+              
+              <div class="glass-divider"></div>
+
+              <div class="glass-item">
+                <div class="glass-value text-amber">
+                  <span class="zone-count">24</span>
+                  <span class="glass-sub" data-i18n="hero_status_active">Zones</span>
+                </div>
+                <div class="glass-caption" data-i18n="hero_status_highrisk">Active High-Risk</div>
+              </div>
+
+              <div class="glass-divider"></div>
+
+              <div class="glass-item">
+                <div class="glass-value sync-time">
+                  <span class="sync-dot"></span>
+                  <span id="lastSyncTime">2 min ago</span>
+                </div>
+                <div class="glass-caption" data-i18n="hero_status_sync">Telemetry Sync</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 4. Trust Metrics Strip -->
+    <section class="metrics-strip" aria-label="Key Coverage Metrics">
+      <div class="container">
+        <div class="metrics-grid">
+          <div class="metric-item">
+            <div class="metric-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="1 6 1 22 8 18 16 22 23 18 23 2 16 6 8 2 1 6"></polygon><line x1="8" y1="2" x2="8" y2="18"></line><line x1="16" y1="6" x2="16" y2="22"></line></svg>
+            </div>
+            <div class="metric-text">
+              <div class="metric-number">8</div>
+              <div class="metric-label" data-i18n="metric_states">North Eastern States</div>
+            </div>
+          </div>
+
+          <div class="metric-divider"></div>
+
+          <div class="metric-item">
+            <div class="metric-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 15s1-1 4-1 5 2 8 2 4-1 4-1V3s-1 1-4 1-5-2-8-2-4 1-4 1z"></path><line x1="4" y1="22" x2="4" y2="15"></line></svg>
+            </div>
+            <div class="metric-text">
+              <div class="metric-number">142</div>
+              <div class="metric-label" data-i18n="metric_corridors">Monitored Corridors</div>
+            </div>
+          </div>
+
+          <div class="metric-divider"></div>
+
+          <div class="metric-item">
+            <div class="metric-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
+            </div>
+            <div class="metric-text">
+              <div class="metric-number">24/7</div>
+              <div class="metric-label" data-i18n="metric_ai">AI Risk Analysis</div>
+            </div>
+          </div>
+
+          <div class="metric-divider"></div>
+
+          <div class="metric-item">
+            <div class="metric-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path></svg>
+            </div>
+            <div class="metric-text">
+              <div class="metric-number">Multi-Lingual</div>
+              <div class="metric-label" data-i18n="metric_alerts">Localized Alerts</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 5. About / How It Works Section (Editorial Two-Column) -->
+    <section class="about-section" id="about">
+      <div class="container">
+        <div class="editorial-grid">
+          <!-- Left: Rounded Graphic/Photo Frame of Field Inspection -->
+          <div class="editorial-left reveal-fade">
+            <div class="field-photo-card">
+              <div class="photo-art-container">
+                <!-- High-fidelity North East Terrain & Field Geologist Graphic -->
+                <svg viewBox="0 0 540 460" class="field-art-svg" xmlns="http://www.w3.org/2000/svg">
+                  <defs>
+                    <linearGradient id="hillGrad1" x1="0" y1="0" x2="0" y2="1">
+                      <stop offset="0%" stop-color="#1e4e3d"/>
+                      <stop offset="100%" stop-color="#103225"/>
+                    </linearGradient>
+                    <linearGradient id="hillGrad2" x1="0" y1="0" x2="0" y2="1">
+                      <stop offset="0%" stop-color="#2d6a4f"/>
+                      <stop offset="100%" stop-color="#1b4332"/>
+                    </linearGradient>
+                    <linearGradient id="cloudGrad" x1="0" y1="0" x2="0" y2="1">
+                      <stop offset="0%" stop-color="#ffffff" stop-opacity="0.3"/>
+                      <stop offset="100%" stop-color="#e2e8f0" stop-opacity="0.1"/>
+                    </linearGradient>
+                  </defs>
+                  
+                  <rect width="540" height="460" rx="16" fill="#0f263d"/>
+                  
+                  <!-- Layered North East Lush Hills (Haflong / Cherrapunji) -->
+                  <circle cx="270" cy="180" r="160" fill="#163954" opacity="0.4"/>
+                  <path d="M0,260 Q130,170 300,230 T540,190 L540,460 L0,460 Z" fill="url(#hillGrad1)"/>
+                  <path d="M0,320 Q200,240 380,310 L540,280 L540,460 L0,460 Z" fill="url(#hillGrad2)"/>
+                  
+                  <!-- Mountain Road with Guardrails -->
+                  <path d="M0,380 Q180,320 360,370 L540,350" stroke="#475569" stroke-width="18" fill="none"/>
+                  <path d="M0,380 Q180,320 360,370 L540,350" stroke="#fbbf24" stroke-width="2" stroke-dasharray="8,8" fill="none"/>
+                  
+                  <!-- Field Inspection Official & Instrument Setup -->
+                  <!-- Tripod & Theodolite / Sensor Rig -->
+                  <g transform="translate(180, 290)">
+                    <line x1="30" y1="20" x2="10" y2="70" stroke="#e2e8f0" stroke-width="3"/>
+                    <line x1="30" y1="20" x2="30" y2="70" stroke="#cbd5e1" stroke-width="3"/>
+                    <line x1="30" y1="20" x2="50" y2="70" stroke="#e2e8f0" stroke-width="3"/>
+                    <circle cx="30" cy="16" r="8" fill="#38bdf8"/>
+                    <rect x="22" y="10" width="16" height="6" rx="2" fill="#0284c7"/>
+                    <!-- Laser / Radar beam scanning slope -->
+                    <line x1="36" y1="14" x2="160" y2="-40" stroke="#ef4444" stroke-width="2" stroke-dasharray="4,2"/>
+                    <circle cx="160" cy="-40" r="4" fill="#ef4444" opacity="0.7"/>
+                  </g>
+
+                  <!-- Geologist / Field Engineer Silhouette with Safety Vest -->
+                  <g transform="translate(120, 270)">
+                    <!-- Hardhat -->
+                    <ellipse cx="25" cy="18" rx="10" ry="7" fill="#facc15"/>
+                    <!-- Head -->
+                    <circle cx="25" cy="24" r="7" fill="#f87171"/>
+                    <!-- Hi-vis Jacket / Vest -->
+                    <path d="M12,32 L38,32 L35,75 L15,75 Z" fill="#f97316"/>
+                    <!-- Reflective stripes -->
+                    <line x1="14" y1="46" x2="36" y2="46" stroke="#f8fafc" stroke-width="3"/>
+                    <line x1="14" y1="58" x2="36" y2="58" stroke="#f8fafc" stroke-width="3"/>
+                    <!-- Tablet in hand -->
+                    <rect x="32" y="44" width="18" height="12" rx="2" fill="#0f172a" stroke="#38bdf8" stroke-width="1"/>
+                    <!-- Legs -->
+                    <line x1="18" y1="75" x2="16" y2="105" stroke="#1e293b" stroke-width="6" stroke-linecap="round"/>
+                    <line x1="32" y1="75" x2="34" y2="105" stroke="#1e293b" stroke-width="6" stroke-linecap="round"/>
+                  </g>
+
+                  <!-- Telemetry HUD Overlay -->
+                  <g transform="translate(310, 80)">
+                    <rect width="200" height="95" rx="8" fill="#0b1b2b" fill-opacity="0.9" stroke="#38bdf8" stroke-width="1.2"/>
+                    <text x="14" y="24" fill="#38bdf8" font-family="'Space Grotesk', sans-serif" font-size="11" font-weight="700">IN-SITU PIEZOMETER</text>
+                    <text x="14" y="46" fill="#f8fafc" font-family="'Plus Jakarta Sans', sans-serif" font-size="13" font-weight="600">Pore Pressure: 42.6 kPa</text>
+                    <text x="14" y="66" fill="#cbd5e1" font-family="'Plus Jakarta Sans', sans-serif" font-size="11">Slope Inclination: 38.2°</text>
+                    <rect x="14" y="76" width="170" height="6" rx="3" fill="#1e293b"/>
+                    <rect x="14" y="76" width="130" height="6" rx="3" fill="#f59e0b"/>
+                  </g>
+                </svg>
+              </div>
+              <div class="photo-caption">
+                <svg class="caption-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg>
+                <span>Joint Geological Survey of India & NESAC slope monitoring array in Dima Hasao, Assam.</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Right: Editorial Content -->
+          <div class="editorial-right reveal-fade" style="animation-delay: 0.15s;">
+            <div class="section-label" data-i18n="about_label">CIVIC SCIENCE & LAST-MILE WARNING</div>
+            <h2 class="editorial-heading">
+              <span data-i18n="about_heading">Intelligence that reaches the last mile</span>
+              <span class="heading-accent-line"></span>
+            </h2>
+
+            <p class="editorial-lead" data-i18n="about_desc">
+              The North Eastern Region experiences some of the highest rainfall gradients in the world. Our platform unifies IMD Doppler precipitation grids, automated in-situ soil moisture piezometers, Sentinel-1 InSAR surface deformation, 40-year historical landslide atlases, and verified citizen reports into one live predictive engine.
+            </p>
+
+            <!-- 3 Numbered Steps -->
+            <div class="numbered-steps">
+              <div class="step-card active-step" data-step="1">
+                <div class="step-number">01</div>
+                <div class="step-body">
+                  <h3 class="step-title" data-i18n="step1_title">Detect</h3>
+                  <p class="step-desc" data-i18n="step1_desc">
+                    In-situ geotechnical sensors, IMD Doppler radars, and Sentinel-1 InSAR satellites monitor ground saturation and millimeter slope creep.
+                  </p>
+                </div>
+              </div>
+
+              <div class="step-card" data-step="2">
+                <div class="step-number">02</div>
+                <div class="step-body">
+                  <h3 class="step-title" data-i18n="step2_title">Predict</h3>
+                  <p class="step-desc" data-i18n="step2_desc">
+                    Multivariate physics-informed AI algorithms cross-reference 40-year geological models with live rainfall thresholds to forecast collapse probability.
+                  </p>
+                </div>
+              </div>
+
+              <div class="step-card" data-step="3">
+                <div class="step-number">03</div>
+                <div class="step-body">
+                  <h3 class="step-title" data-i18n="step3_title">Alert</h3>
+                  <p class="step-desc" data-i18n="step3_desc">
+                    Automated Common Alerting Protocol (CAP) relays localized siren triggers, SMS broadcasts, and district emergency dispatches within seconds.
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 6. Live Risk Overview Section (Alternating Light Blue-Grey) -->
+    <section class="live-risk-section" id="live-risk">
+      <div class="container">
+        <div class="section-header text-center">
+          <span class="section-badge" data-i18n="risk_badge">REAL-TIME THREAT ASSESSMENT</span>
+          <h2 class="section-heading">
+            <span data-i18n="risk_heading">Live risk at a glance</span>
+            <span class="heading-accent-line center"></span>
+          </h2>
+          <p class="section-subheading" data-i18n="risk_subheading">
+            A clear, actionable picture for district administrations, border road organizations, and response teams.
+          </p>
+
+          <!-- Filter Pills -->
+          <div class="risk-filters" role="tablist" aria-label="Risk Severity Filters">
+            <button class="filter-pill active" data-filter="all" role="tab" aria-selected="true" data-i18n="filter_all">All Active Alerts (3)</button>
+            <button class="filter-pill" data-filter="critical" role="tab" aria-selected="false" data-i18n="filter_critical">Critical (1)</button>
+            <button class="filter-pill" data-filter="high" role="tab" aria-selected="false" data-i18n="filter_high">High Risk (1)</button>
+            <button class="filter-pill" data-filter="moderate" role="tab" aria-selected="false" data-i18n="filter_moderate">Moderate (1)</button>
+          </div>
+        </div>
+
+        <!-- 3 Polished Horizontal Cards -->
+        <div class="risk-cards-grid">
+          <!-- Card 1: Critical -->
+          <article class="risk-card card-critical" data-category="critical">
+            <div class="risk-card-left">
+              <div class="severity-badge badge-critical">
+                <span class="badge-dot"></span>
+                <span data-i18n="badge_critical">CRITICAL RISK</span>
+              </div>
+              <div class="confidence-pill" title="AI Model Prediction Confidence">
+                <svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>
+                <span>94% Confidence</span>
+              </div>
+            </div>
+
+            <div class="risk-card-mid">
+              <div class="location-title">
+                <svg class="loc-pin-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg>
+                <h3>NH-13 Corridor (km 38–46), Arunachal Pradesh</h3>
+              </div>
+              <p class="risk-cause">
+                <strong>Trigger:</strong> Extreme antecedent rainfall (186 mm / 24h) combined with high pore-water pressure along steep shale cut slopes.
+              </p>
+              <div class="risk-telemetry-chips">
+                <span class="t-chip">Rainfall: <strong>186 mm</strong></span>
+                <span class="t-chip">Pore Pressure: <strong>48.2 kPa</strong></span>
+                <span class="t-chip">Road Status: <strong class="text-critical">Restricted / Blocked</strong></span>
+              </div>
+            </div>
+
+            <div class="risk-card-right">
+              <div class="card-time">
+                <svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
+                <span>Updated 4 mins ago</span>
+              </div>
+              <button class="btn btn-card-details" onclick="openZoneDetails('arunachal-nh13')">
+                <span>View Telemetry Details</span>
+                <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+              </button>
+            </div>
+          </article>
+
+          <!-- Card 2: High -->
+          <article class="risk-card card-high" data-category="high">
+            <div class="risk-card-left">
+              <div class="severity-badge badge-high">
+                <span class="badge-dot"></span>
+                <span data-i18n="badge_high">HIGH RISK</span>
+              </div>
+              <div class="confidence-pill">
+                <svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>
+                <span>87% Confidence</span>
+              </div>
+            </div>
+
+            <div class="risk-card-mid">
+              <div class="location-title">
+                <svg class="loc-pin-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg>
+                <h3>Dima Hasao (Haflong–Jatinga Hill), Assam</h3>
+              </div>
+              <p class="risk-cause">
+                <strong>Trigger:</strong> Soil moisture threshold crossed (84% saturation). Surface cracks reported by local railway wardens along hill slopes.
+              </p>
+              <div class="risk-telemetry-chips">
+                <span class="t-chip">Saturation: <strong>84%</strong></span>
+                <span class="t-chip">Creep Rate: <strong>2.4 mm/hr</strong></span>
+                <span class="t-chip">Railway Status: <strong class="text-amber">Speed Limit 20 km/h</strong></span>
+              </div>
+            </div>
+
+            <div class="risk-card-right">
+              <div class="card-time">
+                <svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
+                <span>Updated 11 mins ago</span>
+              </div>
+              <button class="btn btn-card-details" onclick="openZoneDetails('assam-dimahasao')">
+                <span>View Telemetry Details</span>
+                <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+              </button>
+            </div>
+          </article>
+
+          <!-- Card 3: Moderate -->
+          <article class="risk-card card-moderate" data-category="moderate">
+            <div class="risk-card-left">
+              <div class="severity-badge badge-moderate">
+                <span class="badge-dot"></span>
+                <span data-i18n="badge_moderate">MODERATE RISK</span>
+              </div>
+              <div class="confidence-pill">
+                <svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>
+                <span>72% Confidence</span>
+              </div>
+            </div>
+
+            <div class="risk-card-mid">
+              <div class="location-title">
+                <svg class="loc-pin-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg>
+                <h3>East Khasi Hills (Cherrapunji–Shella Pass), Meghalaya</h3>
+              </div>
+              <p class="risk-cause">
+                <strong>Trigger:</strong> IMD radar predicts 95mm precipitation over the next 6 hours over weathered limestone and loose overburden.
+              </p>
+              <div class="risk-telemetry-chips">
+                <span class="t-chip">Forecast Rain: <strong>95 mm</strong></span>
+                <span class="t-chip">Slope Angle: <strong>44°</strong></span>
+                <span class="t-chip">Road Status: <strong class="text-emerald">Passable with Caution</strong></span>
+              </div>
+            </div>
+
+            <div class="risk-card-right">
+              <div class="card-time">
+                <svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
+                <span>Updated 18 mins ago</span>
+              </div>
+              <button class="btn btn-card-details" onclick="openZoneDetails('meghalaya-khasi')">
+                <span>View Telemetry Details</span>
+                <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+              </button>
+            </div>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- 7. Interactive Map Showcase (Dark Navy Panel) -->
+    <section class="map-showcase-section" id="risk-map">
+      <div class="container">
+        <div class="map-header-row">
+          <div>
+            <span class="section-badge badge-light" data-i18n="map_badge">GEOSPATIAL INTELLIGENCE GRID</span>
+            <h2 class="map-main-heading" data-i18n="map_heading">North Eastern Geospatial Risk Map</h2>
+          </div>
+          <div class="map-status-live">
+            <span class="live-dot-green"></span>
+            <span>Live Telemetry Stream: <strong>142 Corridors Active</strong></span>
+          </div>
+        </div>
+
+        <!-- Main Dark Navy Map Panel -->
+        <div class="map-panel-container">
+          <!-- Left: Concise Map Controls -->
+          <div class="map-controls-bar">
+            <h3 class="controls-title" data-i18n="map_layers_title">Active GIS Layers</h3>
+            
+            <div class="layer-toggle-list">
+              <button class="layer-btn active" data-layer="rainfall">
+                <svg class="layer-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 16.58A5 5 0 0 0 18 7h-1.26A8 8 0 1 0 4 15.25"></path><line x1="8" y1="19" x2="8" y2="21"></line><line x1="8" y1="13" x2="8" y2="15"></line><line x1="16" y1="19" x2="16" y2="21"></line><line x1="16" y1="13" x2="16" y2="15"></line><line x1="12" y1="21" x2="12" y2="23"></line><line x1="12" y1="15" x2="12" y2="17"></line></svg>
+                <span>IMD Rainfall Radar</span>
+                <span class="layer-switch"></span>
+              </button>
+
+              <button class="layer-btn active" data-layer="moisture">
+                <svg class="layer-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2.69l5.66 5.66a8 8 0 1 1-11.31 0z"></path></svg>
+                <span>Soil Moisture Sensors</span>
+                <span class="layer-switch"></span>
+              </button>
+
+              <button class="layer-btn active" data-layer="slope">
+                <svg class="layer-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 2 22 22 22"></polygon></svg>
+                <span>Slope InSAR Stability</span>
+                <span class="layer-switch"></span>
+              </button>
+
+              <button class="layer-btn active" data-layer="roads">
+                <svg class="layer-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="6" cy="19" r="3"></circle><path d="M9 19h8.5a4.5 4.5 0 0 0 0-9H6"></path><circle cx="6" cy="10" r="3"></circle></svg>
+                <span>Road Connectivity</span>
+                <span class="layer-switch"></span>
+              </button>
+
+              <button class="layer-btn active" data-layer="citizen">
+                <svg class="layer-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg>
+                <span>Citizen Reports</span>
+                <span class="layer-switch"></span>
+              </button>
+            </div>
+
+            <!-- Map Legend -->
+            <div class="map-legend">
+              <div class="legend-title" data-i18n="map_legend_title">Risk Index</div>
+              <div class="legend-items">
+                <div class="legend-row"><span class="legend-dot critical"></span><span>Critical (Red Alert)</span></div>
+                <div class="legend-row"><span class="legend-dot high"></span><span>High Risk (Amber)</span></div>
+                <div class="legend-row"><span class="legend-dot moderate"></span><span>Moderate Risk</span></div>
+                <div class="legend-row"><span class="legend-dot safe"></span><span>Normal Monitoring</span></div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Center Interactive Vector Map Viewport -->
+          <div class="map-canvas-viewport">
+            <svg id="nerGisMapSvg" viewBox="0 0 900 650" class="gis-svg-map" xmlns="http://www.w3.org/2000/svg">
+              <defs>
+                <radialGradient id="radarScan" cx="45%" cy="35%" r="60%">
+                  <stop offset="0%" stop-color="#38bdf8" stop-opacity="0.18"/>
+                  <stop offset="60%" stop-color="#0284c7" stop-opacity="0.08"/>
+                  <stop offset="100%" stop-color="#0b1b2b" stop-opacity="0"/>
+                </radialGradient>
+                <pattern id="gridPattern" width="40" height="40" patternUnits="userSpaceOnUse">
+                  <path d="M 40 0 L 0 0 0 40" fill="none" stroke="#1e293b" stroke-width="0.8"/>
+                </pattern>
+                <linearGradient id="corridorGrad" x1="0" y1="0" x2="1" y2="1">
+                  <stop offset="0%" stop-color="#38bdf8"/>
+                  <stop offset="100%" stop-color="#818cf8"/>
+                </linearGradient>
+              </defs>
+
+              <!-- Map Background Grid -->
+              <rect width="900" height="650" fill="#081421"/>
+              <rect width="900" height="650" fill="url(#gridPattern)"/>
+              <rect width="900" height="650" fill="url(#radarScan)"/>
+
+              <!-- State Boundaries for the 8 North East States -->
+              <!-- Sikkim -->
+              <path class="state-poly" id="poly-sikkim" d="M120,180 L160,160 L180,210 L140,240 Z" fill="#0f283d" stroke="#334155" stroke-width="1.2"/>
+              <text x="135" y="205" class="state-label">SIKKIM</text>
+
+              <!-- Assam (Brahmaputra Valley) -->
+              <path class="state-poly" id="poly-assam" d="M220,290 L400,260 L540,220 L660,200 L720,240 L680,310 L520,330 L380,360 L240,360 Z" fill="#0c2336" stroke="#334155" stroke-width="1.2"/>
+              <text x="440" y="295" class="state-label large">ASSAM</text>
+
+              <!-- Arunachal Pradesh -->
+              <path class="state-poly" id="poly-arunachal" d="M250,220 L420,170 L580,130 L740,120 L840,160 L780,220 L660,200 L540,220 L400,260 L250,290 Z" fill="#132e45" stroke="#38bdf8" stroke-width="1.2" stroke-opacity="0.6"/>
+              <text x="560" y="175" class="state-label large">ARUNACHAL PRADESH</text>
+
+              <!-- Meghalaya -->
+              <path class="state-poly" id="poly-meghalaya" d="M250,370 L460,370 L480,430 L260,430 Z" fill="#123240" stroke="#334155" stroke-width="1.2"/>
+              <text x="330" y="405" class="state-label">MEGHALAYA</text>
+
+              <!-- Nagaland -->
+              <path class="state-poly" id="poly-nagaland" d="M680,240 L760,230 L780,320 L710,340 Z" fill="#0e2a3c" stroke="#334155" stroke-width="1.2"/>
+              <text x="715" y="285" class="state-label">NAGALAND</text>
+
+              <!-- Manipur -->
+              <path class="state-poly" id="poly-manipur" d="M680,350 L770,340 L760,450 L680,460 Z" fill="#0f293b" stroke="#334155" stroke-width="1.2"/>
+              <text x="705" y="405" class="state-label">MANIPUR</text>
+
+              <!-- Mizoram -->
+              <path class="state-poly" id="poly-mizoram" d="M600,450 L680,450 L670,580 L590,560 Z" fill="#112d42" stroke="#334155" stroke-width="1.2"/>
+              <text x="615" y="520" class="state-label">MIZORAM</text>
+
+              <!-- Tripura -->
+              <path class="state-poly" id="poly-tripura" d="M480,460 L560,460 L550,550 L490,540 Z" fill="#0d2537" stroke="#334155" stroke-width="1.2"/>
+              <text x="500" y="505" class="state-label">TRIPURA</text>
+
+              <!-- Layer: Major Road Corridors -->
+              <g id="layer-roads" class="gis-layer">
+                <!-- NH-13 Trans-Arunachal Highway -->
+                <path d="M260,285 Q340,240 460,220 T620,180 T760,150" class="highway-path" stroke="#60a5fa" stroke-width="3" fill="none"/>
+                <!-- NH-27 East-West Assam -->
+                <path d="M220,320 L380,320 L520,300 L680,260" class="highway-path" stroke="#94a3b8" stroke-width="2.5" stroke-dasharray="6,4" fill="none"/>
+                <!-- NH-2 Kohima-Imphal -->
+                <path d="M720,300 L715,430" class="highway-path" stroke="#60a5fa" stroke-width="2.5" fill="none"/>
+                <!-- NH-6 Shillong-Silchar -->
+                <path d="M380,390 L520,410 L620,480" class="highway-path" stroke="#94a3b8" stroke-width="2.5" stroke-dasharray="6,4" fill="none"/>
+              </g>
+
+              <!-- Layer: Rainfall Radar Contours (Dynamic) -->
+              <g id="layer-rainfall" class="gis-layer">
+                <!-- Heavy precipitation polygon over Western Arunachal & Meghalaya -->
+                <path d="M240,240 Q320,190 380,260 Q420,330 330,360 Q230,320 240,240 Z" fill="#ef4444" fill-opacity="0.22" stroke="#ef4444" stroke-width="1.5" stroke-dasharray="4,2"/>
+                <path d="M270,380 Q390,360 450,400 Q430,440 310,430 Z" fill="#f59e0b" fill-opacity="0.25" stroke="#f59e0b" stroke-width="1.5"/>
+              </g>
+
+              <!-- Interactive Location Pins -->
+              <!-- Pin 1: Bhalukpong-Tawang (Arunachal Pradesh) - CRITICAL -->
+              <g class="map-pin-group active-pin" id="pin-bhalukpong" transform="translate(320, 235)" onclick="selectLocation('bhalukpong')">
+                <circle cx="0" cy="0" r="22" class="pin-pulse-crit"/>
+                <circle cx="0" cy="0" r="12" fill="#ef4444" fill-opacity="0.6"/>
+                <circle cx="0" cy="0" r="6" fill="#ef4444"/>
+                <circle cx="0" cy="0" r="2.5" fill="#ffffff"/>
+                <text x="14" y="4" class="pin-label-text">Bhalukpong–Tawang (NH-13)</text>
+              </g>
+
+              <!-- Pin 2: Haflong-Jatinga (Assam) - HIGH -->
+              <g class="map-pin-group" id="pin-haflong" transform="translate(540, 340)" onclick="selectLocation('haflong')">
+                <circle cx="0" cy="0" r="16" class="pin-pulse-high"/>
+                <circle cx="0" cy="0" r="10" fill="#f59e0b" fill-opacity="0.6"/>
+                <circle cx="0" cy="0" r="5" fill="#f59e0b"/>
+                <circle cx="0" cy="0" r="2" fill="#ffffff"/>
+                <text x="14" y="4" class="pin-label-text">Haflong–Jatinga Ridge</text>
+              </g>
+
+              <!-- Pin 3: Cherrapunji / Mawsynram (Meghalaya) - MODERATE -->
+              <g class="map-pin-group" id="pin-cherrapunji" transform="translate(360, 410)" onclick="selectLocation('cherrapunji')">
+                <circle cx="0" cy="0" r="8" fill="#3b82f6" fill-opacity="0.6"/>
+                <circle cx="0" cy="0" r="4.5" fill="#3b82f6"/>
+                <circle cx="0" cy="0" r="2" fill="#ffffff"/>
+                <text x="12" y="4" class="pin-label-text">Cherrapunji–Shella Pass</text>
+              </g>
+
+              <!-- Pin 4: Kohima Bypass (Nagaland) - SAFE -->
+              <g class="map-pin-group" id="pin-kohima" transform="translate(730, 310)" onclick="selectLocation('kohima')">
+                <circle cx="0" cy="0" r="4.5" fill="#10b981"/>
+                <text x="12" y="4" class="pin-label-text">Kohima Bypass (NH-29)</text>
+              </g>
+
+              <!-- Pin 5: Sairang (Mizoram) - MODERATE -->
+              <g class="map-pin-group" id="pin-sairang" transform="translate(635, 510)" onclick="selectLocation('sairang')">
+                <circle cx="0" cy="0" r="4.5" fill="#3b82f6"/>
+                <text x="12" y="4" class="pin-label-text">Sairang–Aizawl Link</text>
+              </g>
+            </svg>
+
+            <!-- Map Viewport Overlay Badges -->
+            <div class="map-geo-badge">
+              <span>Grid: 25.57° N – 93.24° E</span>
+              <span>Datum: WGS84</span>
+              <span>Satellite: Sentinel-1 / Bhuvan-3D</span>
+            </div>
+          </div>
+
+          <!-- Right: Selected Location Insight Card -->
+          <div class="map-insight-card" id="locationInsightCard">
+            <div class="insight-header">
+              <span class="insight-eyebrow">LOCATION TELEMETRY</span>
+              <div class="insight-badge badge-critical" id="insBadge">CRITICAL</div>
+            </div>
+
+            <h3 class="insight-title" id="insTitle">Bhalukpong–Tawang Road</h3>
+            <p class="insight-corridor" id="insCorridor">NH-13 Corridor (km 42), West Kameng, Arunachal Pradesh</p>
+
+            <div class="insight-metrics-grid">
+              <div class="ins-metric">
+                <span class="ins-metric-label">24h Rainfall</span>
+                <span class="ins-metric-val" id="insRain">186 mm</span>
+              </div>
+              <div class="ins-metric">
+                <span class="ins-metric-label">Soil Saturation</span>
+                <span class="ins-metric-val" id="insMoisture">91%</span>
+              </div>
+              <div class="ins-metric">
+                <span class="ins-metric-label">Road Status</span>
+                <span class="ins-metric-val text-critical" id="insRoad">Restricted</span>
+              </div>
+              <div class="ins-metric">
+                <span class="ins-metric-label">Slope Stability</span>
+                <span class="ins-metric-val text-critical" id="insSlope">Shear Imminent</span>
+              </div>
+            </div>
+
+            <div class="insight-action-box">
+              <div class="action-title">
+                <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/></svg>
+                <span>Recommended Protocol:</span>
+              </div>
+              <p class="action-desc" id="insAction">Pre-position SDRF response team at Bhalukpong; halt heavy civilian transit beyond Sessa check-gate.</p>
+            </div>
+
+            <div class="insight-actions-footer">
+              <button class="btn btn-navy-solid btn-sm" onclick="triggerDistrictAlert()">
+                <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path><path d="M13.73 21a2 2 0 0 1-3.46 0"></path></svg>
+                <span>Alert District Control</span>
+              </button>
+              <button class="btn btn-outline-light btn-sm" onclick="openIncidentModal()">
+                <span>Report Field Sighting</span>
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 8. Features Section (Crisp White with Subtle Hover Reveals) -->
+    <section class="features-section" id="features">
+      <div class="container">
+        <div class="section-header text-center">
+          <span class="section-badge" data-i18n="feat_badge">SYSTEM CAPABILITIES</span>
+          <h2 class="section-heading">
+            <span data-i18n="feat_heading">Built for response, not just reporting</span>
+            <span class="heading-accent-line center"></span>
+          </h2>
+          <p class="section-subheading" data-i18n="feat_subheading">
+            Engineered specifically for the steep topography, heavy monsoon deluge, and remote terrain of North East India.
+          </p>
+        </div>
+
+        <div class="features-grid">
+          <!-- Card 1: AI Risk Prediction -->
+          <div class="feature-card reveal-fade">
+            <div class="feature-icon-wrapper">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><path d="M12 2a14.5 14.5 0 0 0 0 20 14.5 14.5 0 0 0 0-20"></path><path d="M2 12h20"></path></svg>
+            </div>
+            <h3 class="feature-title" data-i18n="feat1_title">AI Risk Prediction</h3>
+            <p class="feature-desc" data-i18n="feat1_desc">
+              Physics-informed deep learning models trained on 40 years of Geological Survey of India records forecast slope shear 6 to 24 hours in advance.
+            </p>
+            <div class="feature-footer">
+              <span class="feature-link" data-i18n="feat_learn">Learn methodology</span>
+              <svg class="feature-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+            </div>
+          </div>
+
+          <!-- Card 2: GIS Monitoring -->
+          <div class="feature-card reveal-fade" style="animation-delay: 0.1s;">
+            <div class="feature-icon-wrapper">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="1 6 1 22 8 18 16 22 23 18 23 2 16 6 8 2 1 6"></polygon><line x1="8" y1="2" x2="8" y2="18"></line><line x1="16" y1="6" x2="16" y2="22"></line></svg>
+            </div>
+            <h3 class="feature-title" data-i18n="feat2_title">GIS Monitoring</h3>
+            <p class="feature-desc" data-i18n="feat2_desc">
+              Real-time synchronization with Sentinel-1 Synthetic Aperture Radar (SAR), ISRO Bhuvan 3D elevation maps, and high-precision contour tracking.
+            </p>
+            <div class="feature-footer">
+              <span class="feature-link" data-i18n="feat_learn">Explore satellite feeds</span>
+              <svg class="feature-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+            </div>
+          </div>
+
+          <!-- Card 3: Community Reporting -->
+          <div class="feature-card reveal-fade" style="animation-delay: 0.2s;">
+            <div class="feature-icon-wrapper">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg>
+            </div>
+            <h3 class="feature-title" data-i18n="feat3_title">Community Reporting</h3>
+            <p class="feature-desc" data-i18n="feat3_desc">
+              Offline-first mobile crowd telemetry empowering village headmen, local truck drivers, and patrol wardens to log early fissures instantly.
+            </p>
+            <div class="feature-footer">
+              <span class="feature-link" data-i18n="feat_learn">View citizen handbook</span>
+              <svg class="feature-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+            </div>
+          </div>
+
+          <!-- Card 4: Offline & Multilingual Alerts -->
+          <div class="feature-card reveal-fade" style="animation-delay: 0.3s;">
+            <div class="feature-icon-wrapper">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path><path d="M13.73 21a2 2 0 0 1-3.46 0"></path></svg>
+            </div>
+            <h3 class="feature-title" data-i18n="feat4_title">Offline & Multilingual Alerts</h3>
+            <p class="feature-desc" data-i18n="feat4_desc">
+              CAP-compliant automated warning broadcasts sent through low-bandwidth SMS, WhatsApp, and localized acoustic sirens across 8 regional languages.
+            </p>
+            <div class="feature-footer">
+              <span class="feature-link" data-i18n="feat_learn">Read alert protocols</span>
+              <svg class="feature-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 9. Field Reporting CTA & Mobile Phone Mockup -->
+    <section class="field-reporting-section" id="field-reporting">
+      <div class="container">
+        <div class="reporting-split-grid">
+          <!-- Left: Realistic Mobile Phone Mockup -->
+          <div class="device-mockup-wrapper reveal-fade">
+            <div class="smartphone-frame">
+              <div class="phone-speaker"></div>
+              <div class="phone-screen">
+                <!-- Mobile App UI Header -->
+                <div class="app-screen-header">
+                  <div class="app-header-title">
+                    <span class="app-badge">NER FIELD APP</span>
+                    <span class="app-sync-state">● Offline Ready</span>
+                  </div>
+                  <div class="app-time" id="appMockClock">16:40</div>
+                </div>
+
+                <!-- App Form Fields -->
+                <div class="app-screen-body">
+                  <div class="app-form-group">
+                    <label class="app-label">1. Slope Incident Photo</label>
+                    <div class="app-photo-drop" id="appMockPhoto">
+                      <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect><circle cx="8.5" cy="8.5" r="1.5"></circle><polyline points="21 15 16 10 5 21"></polyline></svg>
+                      <span class="photo-text">Photo Attached: <strong>Fissure_NH13.jpg</strong></span>
+                    </div>
+                  </div>
+
+                  <div class="app-form-group">
+                    <label class="app-label">2. Auto GPS Geotag</label>
+                    <div class="app-gps-field">
+                      <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="#38bdf8" stroke-width="2"><polygon points="3 11 22 2 13 21 11 13 3 11"></polygon></svg>
+                      <span>27.5861° N, 92.4219° E (Kameng)</span>
+                    </div>
+                  </div>
+
+                  <div class="app-form-group">
+                    <label class="app-label">3. Incident Type</label>
+                    <div class="app-select-mock">
+                      <span>Active Fissure / Slope Creep</span>
+                      <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"></polyline></svg>
+                    </div>
+                  </div>
+
+                  <div class="app-form-group">
+                    <div class="app-toggle-row">
+                      <span>Save Offline & Sync when connected</span>
+                      <span class="app-switch-on"></span>
+                    </div>
+                  </div>
+
+                  <button class="app-submit-btn" onclick="openIncidentModal()">
+                    <span>Submit Incident Report</span>
+                    <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2"><line x1="22" y1="2" x2="11" y2="13"></line><polygon points="22 2 15 22 11 13 2 9 22 2"></polygon></svg>
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Right: Reporting Copy & Actions -->
+          <div class="reporting-content-side reveal-fade" style="animation-delay: 0.15s;">
+            <span class="section-badge" data-i18n="report_badge">COMMUNITY INTELLIGENCE</span>
+            <h2 class="reporting-heading" data-i18n="report_heading">
+              Every local observation can save a road, a village, or a life.
+            </h2>
+            <p class="reporting-lead" data-i18n="report_lead">
+              When ground cracks first appear or culverts choke during a storm, the earliest eyes on the mountain are village residents, border patrol troops, and transport drivers.
+            </p>
+            <p class="reporting-desc" data-i18n="report_desc">
+              Reports submitted via our lightweight mobile portal automatically attach satellite coordinates, compress photos for 2G network transmission, and queue locally if cellular signals fail.
+            </p>
+
+            <div class="reporting-actions">
+              <button class="btn btn-navy pill-btn" onclick="openIncidentModal()">
+                <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/></svg>
+                <span data-i18n="report_btn_incident">Report an Incident</span>
+              </button>
+              <button class="btn btn-outline-navy pill-btn" onclick="triggerAppDownload()">
+                <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
+                <span data-i18n="report_btn_download">Download Field App (Android / iOS)</span>
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 10. Emergency Response Timeline Section -->
+    <section class="emergency-response-section" id="emergency-response">
+      <div class="container">
+        <div class="section-header text-center">
+          <span class="section-badge" data-i18n="resp_badge">ACTIVE DISPATCHES</span>
+          <h2 class="section-heading">
+            <span data-i18n="resp_heading">Emergency Response Network</span>
+            <span class="heading-accent-line center"></span>
+          </h2>
+          <p class="section-subheading" data-i18n="resp_subheading">
+            Coordinated field deployment across SDRF, BRO (Border Roads Organisation), NDMA, and District Disaster Management Authorities.
+          </p>
+        </div>
+
+        <!-- Priority Timeline List -->
+        <div class="timeline-container">
+          <!-- Timeline Item 1: Severe -->
+          <div class="timeline-card timeline-severe">
+            <div class="timeline-marker">
+              <span class="timeline-dot dot-severe"></span>
+              <span class="timeline-line"></span>
+            </div>
+            <div class="timeline-card-inner">
+              <div class="timeline-top">
+                <span class="timeline-tier-badge tier-severe">SEVERE INCIDENT</span>
+                <span class="timeline-time">Dispatched 22m ago</span>
+              </div>
+              <h3 class="timeline-title">Road Blockade & Debris Flow near Tawang (NH-13 km 42)</h3>
+              <p class="timeline-summary">
+                50-meter debris flow obstructed both vehicular lanes. 4 heavy earthmovers mobilised with earth clearing crews.
+              </p>
+              <div class="timeline-meta-grid">
+                <div class="meta-block">
+                  <span class="meta-k">Assigned Unit:</span>
+                  <span class="meta-v">SDRF Team 4 & BRO Task Force 14</span>
+                </div>
+                <div class="meta-block">
+                  <span class="meta-k">Estimated Clearance (ETA):</span>
+                  <span class="meta-v highlight">35 minutes</span>
+                </div>
+                <div class="meta-block">
+                  <span class="meta-k">Diversion Route:</span>
+                  <span class="meta-v">Via Old Bomdila Pass Loop</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Timeline Item 2: High -->
+          <div class="timeline-card timeline-high">
+            <div class="timeline-marker">
+              <span class="timeline-dot dot-high"></span>
+              <span class="timeline-line"></span>
+            </div>
+            <div class="timeline-card-inner">
+              <div class="timeline-top">
+                <span class="timeline-tier-badge tier-high">HIGH PRIORITY</span>
+                <span class="timeline-time">Dispatched 48m ago</span>
+              </div>
+              <h3 class="timeline-title">Slope Crack & Retaining Wall Shift near Haflong (Dima Hasao)</h3>
+              <p class="timeline-summary">
+                Geotechnical inspection requested by Railway Divisional Engineer. Extensometer installed to monitor lateral displacement.
+              </p>
+              <div class="timeline-meta-grid">
+                <div class="meta-block">
+                  <span class="meta-k">Assigned Unit:</span>
+                  <span class="meta-v">PWD Geotechnical Cell & NF Railway Div</span>
+                </div>
+                <div class="meta-block">
+                  <span class="meta-k">Estimated Inspection ETA:</span>
+                  <span class="meta-v highlight">1 hr 15 mins</span>
+                </div>
+                <div class="meta-block">
+                  <span class="meta-k">Precaution:</span>
+                  <span class="meta-v">Rail speed caution (20 km/h) active</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Timeline Item 3: Moderate -->
+          <div class="timeline-card timeline-moderate">
+            <div class="timeline-marker">
+              <span class="timeline-dot dot-moderate"></span>
+              <span class="timeline-line"></span>
+            </div>
+            <div class="timeline-card-inner">
+              <div class="timeline-top">
+                <span class="timeline-tier-badge tier-moderate">LOCAL ADVISORY</span>
+                <span class="timeline-time">Issued 1h 10m ago</span>
+              </div>
+              <h3 class="timeline-title">Flash Flood & Slope Saturation Warning near Cherrapunji</h3>
+              <p class="timeline-summary">
+                Localized SMS siren alert dispatched to 14 hillside villages. Village disaster management committees activated for voluntary relocation.
+              </p>
+              <div class="timeline-meta-grid">
+                <div class="meta-block">
+                  <span class="meta-k">Assigned Unit:</span>
+                  <span class="meta-v">East Khasi Hills District Control Room</span>
+                </div>
+                <div class="meta-block">
+                  <span class="meta-k">Status:</span>
+                  <span class="meta-v highlight">CAP Broadcast Completed</span>
+                </div>
+                <div class="meta-block">
+                  <span class="meta-k">Shelter Camp:</span>
+                  <span class="meta-v">Sohra Community Hall On Standby</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- 11. Official Dark Navy Footer -->
+  <footer class="main-footer" role="contentinfo">
+    <div class="container footer-container">
+      <div class="footer-top-grid">
+        <!-- Col 1: Brand & Purpose -->
+        <div class="footer-col brand-col">
+          <div class="footer-brand-wrap">
+            <img src="assets/logo.svg" alt="NER Logo" class="footer-logo" width="40" height="40">
+            <div class="footer-brand-text">
+              <span class="footer-brand-title">NER Landslide Warning</span>
+              <span class="footer-brand-sub">Predict. Prepare. Protect.</span>
+            </div>
+          </div>
+          <p class="footer-mission-text">
+            Built for climate-resilient governance, hill slope stability, and life safety across Arunachal Pradesh, Assam, Manipur, Meghalaya, Mizoram, Nagaland, Sikkim, and Tripura.
+          </p>
+          <div class="footer-gov-seal">
+            <span class="seal-text">A Joint Initiative of NDMA • NEC • GSI • NESAC • IMD</span>
+          </div>
+        </div>
+
+        <!-- Col 2: Quick Links -->
+        <div class="footer-col">
+          <h4 class="footer-heading">Platform Systems</h4>
+          <ul class="footer-links">
+            <li><a href="#risk-map">Interactive GIS Risk Map</a></li>
+            <li><a href="#live-risk">Real-time Weather Bulletins</a></li>
+            <li><a href="#field-reporting">Citizen Observation Portal</a></li>
+            <li><a href="#emergency-response">Response Units & Live Dispatches</a></li>
+            <li><a href="#about">Geotechnical AI Methodology</a></li>
+          </ul>
+        </div>
+
+        <!-- Col 3: Emergency Contacts -->
+        <div class="footer-col">
+          <h4 class="footer-heading">Emergency Helplines</h4>
+          <ul class="footer-contact-list">
+            <li>
+              <span class="c-label">State Disaster Control:</span>
+              <a href="tel:1077" class="c-link"><strong>1077</strong> (Toll Free 24/7)</a>
+            </li>
+            <li>
+              <span class="c-label">National Emergency Number:</span>
+              <a href="tel:112" class="c-link"><strong>112</strong></a>
+            </li>
+            <li>
+              <span class="c-label">NDRF Guwahati HQ:</span>
+              <a href="tel:03612237000" class="c-link">0361-2237000</a>
+            </li>
+            <li>
+              <span class="c-label">BRO Emergency Clearance:</span>
+              <a href="tel:1800118800" class="c-link">1800-11-8800</a>
+            </li>
+          </ul>
+        </div>
+
+        <!-- Col 4: Partner Agencies & Data Sources -->
+        <div class="footer-col">
+          <h4 class="footer-heading">Data Source Disclosure</h4>
+          <p class="footer-data-disc">
+            Precipitation telemetry is sourced directly from India Meteorological Department (IMD) automatic weather stations. Satellite InSAR displacement feeds are provided via ISRO Bhuvan and ESA Copernicus Sentinel-1.
+          </p>
+          <div class="footer-badges">
+            <span class="f-badge">ISO 27001 Certified</span>
+            <span class="f-badge">CAP v1.2 Compliant</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="footer-bottom-bar">
+        <div class="footer-copy">
+          © 2026 Government of India — North Eastern Council (NEC). All rights reserved.
+        </div>
+        <div class="footer-bottom-links">
+          <a href="#">Privacy Policy</a>
+          <span class="f-sep">•</span>
+          <a href="#">Terms of Use</a>
+          <span class="f-sep">•</span>
+          <a href="#">Hyperlinking Policy</a>
+          <span class="f-sep">•</span>
+          <a href="#">Accessibility Statement</a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Interactive Incident Reporting Modal -->
+  <div class="modal-backdrop" id="incidentModal" aria-hidden="true" role="dialog" aria-labelledby="modalIncidentTitle">
+    <div class="modal-dialog">
+      <div class="modal-header">
+        <div class="modal-title-wrap">
+          <div class="modal-icon-badge">
+            <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/></svg>
+          </div>
+          <div>
+            <h3 id="modalIncidentTitle" class="modal-title">Citizen & Field Incident Report</h3>
+            <p class="modal-sub">Submit real-time ground observations directly to District Disaster Officers</p>
+          </div>
+        </div>
+        <button class="modal-close-btn" onclick="closeIncidentModal()" aria-label="Close modal">×</button>
+      </div>
+
+      <form id="incidentForm" onsubmit="handleIncidentSubmit(event)" class="modal-body">
+        <div class="form-row">
+          <div class="form-col">
+            <label class="form-label" for="fieldState">State <span class="req">*</span></label>
+            <select id="fieldState" class="form-select" required>
+              <option value="">Select State</option>
+              <option value="Arunachal Pradesh" selected>Arunachal Pradesh</option>
+              <option value="Assam">Assam</option>
+              <option value="Manipur">Manipur</option>
+              <option value="Meghalaya">Meghalaya</option>
+              <option value="Mizoram">Mizoram</option>
+              <option value="Nagaland">Nagaland</option>
+              <option value="Sikkim">Sikkim</option>
+              <option value="Tripura">Tripura</option>
+            </select>
+          </div>
+          <div class="form-col">
+            <label class="form-label" for="fieldCorridor">Highway / Corridor <span class="req">*</span></label>
+            <input type="text" id="fieldCorridor" class="form-input" placeholder="e.g. NH-13 Bhalukpong–Tawang km 42" value="NH-13 Corridor near Sessa" required>
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-col">
+            <label class="form-label" for="fieldIncidentType">Incident Type <span class="req">*</span></label>
+            <select id="fieldIncidentType" class="form-select" required>
+              <option value="Slope Fissure">Slope Fissure / Ground Cracking</option>
+              <option value="Debris Flow">Debris Flow / Mudslide</option>
+              <option value="Rockfall">Rockfall / Boulder Obstruction</option>
+              <option value="Choked Culvert">Choked Culvert / Water Accumulation</option>
+              <option value="Retaining Wall Deflection">Retaining Wall Deflection</option>
+            </select>
+          </div>
+          <div class="form-col">
+            <label class="form-label" for="fieldSeverity">Assessed Severity <span class="req">*</span></label>
+            <select id="fieldSeverity" class="form-select" required>
+              <option value="Critical">Critical (Immediate Road Closure)</option>
+              <option value="High" selected>High Risk (Partial Blockade)</option>
+              <option value="Moderate">Moderate (Early Precaution)</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">GPS Geolocation</label>
+          <div class="gps-input-wrap">
+            <input type="text" id="fieldGps" class="form-input" value="27.5861° N, 92.4219° E (Accurate to 4m)" readonly>
+            <button type="button" class="btn btn-gps-refresh" onclick="refreshMockGps()">
+              <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2"><polyline points="23 4 23 10 17 10"></polyline><polyline points="1 20 1 14 7 14"></polyline><path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"></path></svg>
+              <span>Recalibrate</span>
+            </button>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="fieldPhoto">Attach Observation Photo</label>
+          <div class="photo-upload-box" onclick="document.getElementById('fieldPhoto').click()">
+            <input type="file" id="fieldPhoto" accept="image/*" class="sr-only" onchange="previewIncidentPhoto(this)">
+            <svg viewBox="0 0 24 24" width="28" height="28" fill="none" stroke="#64748b" stroke-width="1.8"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect><circle cx="8.5" cy="8.5" r="1.5"></circle><polyline points="21 15 16 10 5 21"></polyline></svg>
+            <div id="photoPreviewText" class="photo-preview-text">
+              <strong>Click to upload field photograph</strong> (Supports offline caching)
+            </div>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="fieldRemarks">Field Remarks / Observations</label>
+          <textarea id="fieldRemarks" class="form-textarea" rows="3" placeholder="Describe slope condition, rainfall intensity, and nearest landmark..."></textarea>
+        </div>
+
+        <div class="modal-footer">
+          <button type="button" class="btn btn-outline-light" onclick="closeIncidentModal()">Cancel</button>
+          <button type="submit" class="btn btn-navy">
+            <span>Transmit Report</span>
+            <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2"><line x1="22" y1="2" x2="11" y2="13"></line><polygon points="22 2 15 22 11 13 2 9 22 2"></polygon></svg>
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Telemetry Detail Modal -->
+  <div class="modal-backdrop" id="telemetryModal" aria-hidden="true" role="dialog">
+    <div class="modal-dialog modal-lg">
+      <div class="modal-header">
+        <div class="modal-title-wrap">
+          <div class="modal-icon-badge" id="teleBadgeIcon">
+            <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"></polyline></svg>
+          </div>
+          <div>
+            <h3 id="teleZoneTitle" class="modal-title">NH-13 Corridor Geotechnical Telemetry</h3>
+            <p id="teleZoneSub" class="modal-sub">Station ID: AR-13-KAMENG • Sensor Array Live Stream</p>
+          </div>
+        </div>
+        <button class="modal-close-btn" onclick="closeTelemetryModal()" aria-label="Close modal">×</button>
+      </div>
+      <div class="modal-body" id="telemetryModalBody">
+        <!-- Content injected dynamically via JS -->
+      </div>
+    </div>
+  </div>
+
+  <!-- Toast Notification -->
+  <div id="toastNotification" class="toast-popup" role="status" aria-live="polite">
+    <div class="toast-icon" id="toastIcon">✓</div>
+    <div class="toast-msg" id="toastMsg">Report submitted successfully!</div>
+  </div>
+
+  <!-- Scripts -->
+  <script src="js/app.js"></script>
+</body>
+</html>
